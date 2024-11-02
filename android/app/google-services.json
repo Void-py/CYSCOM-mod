@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "845237595613",
+    "firebase_url": "https://cyscom-mod-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "cyscom-mod",
+    "storage_bucket": "cyscom-mod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845237595613:android:bcabb3d098c90949515a34",
+        "android_client_info": {
+          "package_name": "com.example.mod_appl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-MEHXFsLgoENIybGkPeOyCjomhbTTSSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
