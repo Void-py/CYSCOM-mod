@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:mod_appl/LeaderBoard.dart';
 import 'package:mod_appl/components/GlassTexture.dart';
 import 'package:mod_appl/controllers/DatabaseController.dart';
 
@@ -7,6 +8,7 @@ bool isAdmin = false;
 String usr_email = "";
 Map<String, dynamic> user_data = {};
 bool data_acquired = false;
+Map<String, dynamic> LeaderBoardData = {};
 
 class MainPage extends StatefulWidget {
   MainPage({super.key, required email}) {
@@ -31,6 +33,12 @@ class _MainPageState extends State<MainPage> {
           print("set sail" + user_data.toString());
         });
       });
+      Databasecontroller.getLeaderBoard().then((onValue) {
+        setState(() {
+          LeaderBoardData = onValue;
+          print(onValue);
+        });
+      });
     });
     print(user_data);
   }
@@ -47,6 +55,17 @@ class _MainPageState extends State<MainPage> {
                 image: AssetImage("assets/img/bg.jpg"), fit: BoxFit.cover),
           ),
           child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Leaderboard(Data: LeaderBoardData)));
+              },
+              child: Icon(Icons.leaderboard_outlined),
+              foregroundColor: Colors.white,
+              backgroundColor: Color.fromRGBO(35, 35, 35, 1),
+            ),
             resizeToAvoidBottomInset: false,
             body: !data_acquired
                 ? Center(child: CircularProgressIndicator())
@@ -101,6 +120,39 @@ class _MemberPageState extends State<MemberPage> {
       opacity = 0;
     }
     print("opacity is: $opacity");
+  }
+
+  List<Widget> return_tasks(Map get_user_data) {
+    List<Widget> return_list = <Widget>[];
+    if (get_user_data.length != 0 && get_user_data["tasklist"] != null) {
+      print("act-1");
+      print(get_user_data["tasklist"].keys.toString());
+      for (var i in get_user_data["tasklist"].keys) {
+        print(i.toString().split("-:-")[0]);
+        return_list.add(GlassTexture(
+            container_child: Container(
+                child: ListView(scrollDirection: Axis.vertical, children: [
+              Container(
+                  child: Text(
+                      "DESC : ${i.toString().split("-:-")[0]}\nASSIGNED TO :\n${i.toString().split("-:-")[1].replaceAll(",", ".")}\nPOINTS:${get_user_data["tasklist"][i.toString()]}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'Rubik',
+                          fontSize: 12,
+                          shadows: [
+                            Shadow(
+                                blurRadius: 10,
+                                color: Colors.black,
+                                offset: Offset(0, 0))
+                          ]))),
+            ])),
+            height_: 140,
+            width_: double.infinity,
+            padding_: 10));
+      }
+    }
+    return return_list;
   }
 
   @override
@@ -335,6 +387,14 @@ class _MemberPageState extends State<MemberPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 500,
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: return_tasks(user_data),
+                ),
+              )
             ],
           ),
         ),

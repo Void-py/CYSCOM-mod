@@ -69,6 +69,20 @@ class Databasecontroller {
     return false;
   }
 
+  static Future<Map<String, dynamic>> getLeaderBoard() async {
+    final snapshot = await FirebaseDatabase.instance
+        .refFromURL(
+            "https://cyscom-mod-default-rtdb.asia-southeast1.firebasedatabase.app/")
+        .child("users")
+        .get();
+
+    if (snapshot.exists) {
+      return Map.from(snapshot.value as dynamic);
+    } else {
+      return {"NIL": "NIL"};
+    }
+  }
+
   static void UpdateTaskList(
       String user_email, Map<String, dynamic> new_tasklist) async {
     final ref = FirebaseDatabase.instance
@@ -80,8 +94,7 @@ class Databasecontroller {
     });
   }
 
-  static void UpdateUserPoints(
-      String user_email, int points) async {
+  static void UpdateUserPoints(String user_email, int points) async {
     final ref = FirebaseDatabase.instance
         .refFromURL(
             "https://cyscom-mod-default-rtdb.asia-southeast1.firebasedatabase.app/")
@@ -90,6 +103,4 @@ class Databasecontroller {
       "points": points,
     });
   }
-
-
 }
